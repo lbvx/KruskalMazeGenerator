@@ -22,5 +22,14 @@ Esse é um programa que utiliza o algoritmo de Kruskal para gerar labirintos.
 
 ![print3](img/100x200.png)
 
+## Instalação e execução
 
-## Instalação 
+Com Python 3 instalado na máquina, primeiro faça no terminal:
+```
+pip install -r requirements.txt
+```
+E depois, basta rodar a main.py:
+```
+python3 src/main.py
+```
+E seguir as instruções durante a execução. Ao terminar de executar, o programa criará o arquivo de imagem *maze.png*.
