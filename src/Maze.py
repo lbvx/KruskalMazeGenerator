@@ -70,4 +70,25 @@ class Maze:
             print('|')
         for j in self.cells[-1]:
             print("+--", end='')
-        print('+') 
+        print('+')
+
+    def __str__(self) -> str:
+        s = ''
+        for i in range(self.rows):
+            for j in range(self.columns):
+                if self.cells[i][j]['N']:
+                    s += '+--'
+                else:
+                    s += '+  '
+            s += '+\n'
+            for j in range(self.columns):
+                if self.cells[i][j]['W']:
+                    s += '|  '
+                else:
+                    s += '   '
+            s += '|\n'
+        for j in self.cells[-1]:
+            s += '+--'
+        s += '+\n'
+
+        return s
