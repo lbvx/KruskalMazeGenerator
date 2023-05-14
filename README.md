@@ -18,7 +18,9 @@ Esse é um programa que utiliza o algoritmo de Kruskal para gerar labirintos.
 
 ![print1](img/20x20.png)
 
-![print2](img/100x200.png)
+![print2](img/30x50.png)
+
+![print3](img/100x200.png)
 
 
 ## Instalação 
