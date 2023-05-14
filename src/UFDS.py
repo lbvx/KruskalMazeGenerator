@@ -5,7 +5,7 @@ class UFDS:
 
     def find(self, s:tuple) -> tuple:
         if self.parent[s[0]][s[1]] != s:
-            self.parent[s[0]][s[1]] = self.find(self.parent[s[0]][s[1]])
+            self.parent[s[0]][s[1]] = self.find(self.parent[s[0]][s[1]]) # compressão da árvore
         return self.parent[s[0]][s[1]]
 
     def union(self, s1:tuple, s2:tuple) -> None:

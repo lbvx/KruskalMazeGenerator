@@ -38,6 +38,7 @@ class Maze:
                 if j < self.columns - 1:
                     self.walls.append((i, j, 'E'))
 
+    # Remove as paredes de forma que o labirinto não tenha partes isoladas, mas sem criar ciclos
     def __kruskal(self) -> None:
         ufds = UFDS(self.rows, self.columns)
         for wall in self.walls:
@@ -53,24 +54,6 @@ class Maze:
             ufds.union(cell1, cell2)
             self.cells[cell1[0]][cell1[1]][dir1] = False
             self.cells[cell2[0]][cell2[1]][dir2] = False
-
-    def print(self) -> None:
-        for i in range(self.rows):
-            for j in range(self.columns):
-                if self.cells[i][j]['N']:
-                    print("+--", end="")
-                else:
-                    print("+  ", end="")
-            print('+')
-            for j in range(self.columns):
-                if self.cells[i][j]['W']:
-                    print("|  ", end="")
-                else:
-                    print("   ", end="")
-            print('|')
-        for j in self.cells[-1]:
-            print("+--", end='')
-        print('+')
 
     def __str__(self) -> str:
         s = ''
