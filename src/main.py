@@ -20,17 +20,17 @@ def menu() -> tuple:
             err = False
         except ValueError:
             print("Somente valores inteiros maiores que 0 para a quantidade de colunas!")
-        err = True
-        while err:
-            try:
-                seed = input('semente de aleatoriedade (deixe em branco para aleatório): ')
-                if seed == '':
-                    seed = None
-                else:
-                    seed = int(seed)
-                err = False
-            except ValueError:
-                print("Somente valores numéricos ou nada!")
+    err = True
+    while err:
+        try:
+            seed = input('semente de aleatoriedade (deixe em branco para aleatório): ')
+            if seed == '':
+                seed = None
+            else:
+                seed = int(seed)
+            err = False
+        except ValueError:
+            print("Somente valores numéricos ou nada!")
     return (rows, columns, seed)
 
 
