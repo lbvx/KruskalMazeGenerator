@@ -18,13 +18,14 @@ class Maze:
     def __init__(self, rows:int, columns:int, seed:int=None) -> None:
         self.rows = rows
         self.columns = columns
-        self.cells = [[{'N': True, 'S': True, 'E': True, 'W': True} for j in range(columns)] for i in range(rows)]
+        self.cells = [[{'N': True, 'S': True, 'E': True, 'W': True} for j in range(columns)] for i in range(rows)]  # Mapa do labirinto (inicialmente todas direções fechadas)
         self.__generate_walls()
 
         random.seed(seed)
         random.shuffle(self.walls)
         self.__kruskal()
 
+    # Cria as possiveis arestas entre vertices
     def __generate_walls(self) -> None:
         self.walls = []
         for i in range(self.rows):

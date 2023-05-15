@@ -12,7 +12,7 @@
 
 ## Sobre
 
-Esse é um programa que utiliza o algoritmo de Kruskal para gerar labirintos.
+Esse programa utiliza o algoritmo de Kruskal para gerar labirintos, criando aleatoriamente caminhos entre as células (inicialmente todas trancadas), até que haja um caminho de uma célula para qualquer outra, sem haver cíclos.
 
 ## Screenshots
 
@@ -32,4 +32,4 @@ E depois, basta rodar a main.py:
 ```
 python3 src/main.py
 ```
-E seguir as instruções durante a execução. Ao terminar de executar, o programa criará o arquivo de imagem *maze.png*.
+E seguir as instruções durante a execução. Ao terminar de executar, o programa criará o arquivo de imagem *maze.png* dentro do diretório usado para execução.

@@ -1,11 +1,11 @@
 class UFDS:
     def __init__(self, rows:int, columns:int) -> None:
-        self.parent = [[(i, j) for j in range(columns)] for i in range(rows)]
-        self.rank = [[1 for j in range(columns)] for i in range(rows)]
+        self.parent = [[(i, j) for j in range(columns)] for i in range(rows)]   # UFDS representada em matriz
+        self.rank = [[1 for j in range(columns)] for i in range(rows)]  # Matriz de alturas
 
     def find(self, s:tuple) -> tuple:
         if self.parent[s[0]][s[1]] != s:
-            self.parent[s[0]][s[1]] = self.find(self.parent[s[0]][s[1]]) # compressão da árvore
+            self.parent[s[0]][s[1]] = self.find(self.parent[s[0]][s[1]]) # Compressão da arvore
         return self.parent[s[0]][s[1]]
 
     def union(self, s1:tuple, s2:tuple) -> None:
