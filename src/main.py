@@ -1,5 +1,6 @@
 from Maze import Maze
 from MazeImage import maze_to_image
+import time
 
 def menu() -> tuple:
     err = True
@@ -37,7 +38,11 @@ def menu() -> tuple:
 def main():
     rows, columns, seed = menu()
     
+    t0 = time.time()
     m = Maze(rows, columns, seed=seed)
+    t1 = time.time()
+
+    print(f'Tempo para gerar: {(t1 - t0):.2f}s')
     
     mi = maze_to_image(m)
     mi.save('maze.png', 'png')
