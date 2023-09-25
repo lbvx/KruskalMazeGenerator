@@ -2,6 +2,7 @@ from Maze import Maze
 from collections import deque
 from MazeImage import maze_to_image
 from PIL import Image
+import heapq
 
 directions = {
         'N': (-1, 0),
@@ -17,18 +18,26 @@ rev_directions = {
 }
 
 class MazeSolver:
-    def __init__(self, maze:Maze, search_all=True, use_dfs=False) -> None:
+    ALLOWED_SEARCHES = ('bfs', 'dfs', 'as')
+    def __init__(self, maze:Maze, search:str='bfs', search_all:bool=False) -> None:
         self.maze = maze
         self.nodes = []
         self.solution = None
         self.search_all = search_all
-        self.use_dfs = use_dfs
+        if search not in MazeSolver.ALLOWED_SEARCHES:
+            raise Exception(f'Search type {search} is not supported')
+        
+        self.search = search
 
     def solve(self) -> None:
         if self.maze.start is None or self.maze.end is None:
             raise Exception("Can't solve maze without set start and end")
         
-        self.__find_nodes()
+        if self.search in ('bfs', 'dfs'):
+            self.__find_nodes()
+
+        elif self.search == 'as':
+            self.__find_nodes_as()
 
         self.solution = []
 
@@ -40,13 +49,14 @@ class MazeSolver:
         self.solution.append(self.start_node[:3])
 
     def __find_nodes(self) -> None:
+        is_dfs = self.search == 'dfs'
         self.start_node = (0, self.maze.start, 'N', None)
         self.end_node = None
         self.nodes = [self.start_node]
         queue = deque()
         queue.append(self.nodes[0])
         while len(queue) > 0:
-            n = queue.pop() if self.use_dfs else queue.popleft()
+            n = queue.pop() if is_dfs else queue.popleft()
             n_y, n_x, n_parent_dir, parent = n
             for direction in directions.keys():
                 if direction == n_parent_dir:
@@ -68,6 +78,42 @@ class MazeSolver:
                         self.nodes.append(new_node)
                         queue.append(new_node)
                         break
+
+    def __dist(self, point):
+        y = self.maze.rows - 1
+        x = self.maze.end
+        return (y - point[0])**2 + (x - point[1])**2      # distancia euclideana
+        # return abs(y - point[0]) + abs(x - point[0])        # distancia de manhattan
+
+    def __find_nodes_as(self) -> None:
+        self.start_node = (0, self.maze.start, 'N', None)
+        self.end_node = None
+        self.nodes = [(self.start_node)]
+        heap = []
+        heapq.heappush(heap, (self.__dist(self.start_node[:2]), self.nodes[0]))
+        while len(heap) > 0:
+            n = heapq.heappop(heap)[1]
+            n_y, n_x, n_parent_dir, parent = n
+            for direction in directions.keys():
+                if direction == n_parent_dir:
+                    continue
+                next_y, next_x = n_y, n_x
+                while not self.maze.cells[next_y][next_x][direction]:
+                    next_y += directions[direction][0]
+                    next_x += directions[direction][1]
+                    if next_y >= self.maze.rows or next_y < 0 or next_x >= self.maze.columns or next_x < 0:
+                        break
+                    
+                    if any([not self.maze.cells[next_y][next_x][d] for d in set(directions.keys()) - set([direction, rev_directions[direction]])]):
+                        new_node = (next_y, next_x, rev_directions[direction], n)
+                        if new_node[0:2] == (self.maze.rows - 1, self.maze.end):
+                            self.end_node = new_node
+                            if not self.search_all:
+                                return
+                            
+                        self.nodes.append(new_node)
+                        heapq.heappush(heap, (self.__dist(new_node[:2]), new_node))
+                        break        
         
     def nodes_to_image(self):
         NODES_COLOR = (0, 230, 90)
