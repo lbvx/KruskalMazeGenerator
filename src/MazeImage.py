@@ -19,8 +19,8 @@ def maze_to_image(maze:Maze) -> Image:
             if not cell['S']:
                 maze_image.putpixel((x, y + 1), 1)
 
-    start = 2 * randrange(0, maze.columns) + 1
-    end = 2 * randrange(0, maze.columns) + 1
+    start = maze.start * 2 + 1
+    end = maze.end * 2 + 1
 
     maze_image.putpixel((start, 0), 1)
     maze_image.putpixel((end, size[1] - 1), 1)
