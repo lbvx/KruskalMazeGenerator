@@ -1,5 +1,8 @@
+from __future__ import annotations
 import random
 from UFDS import UFDS
+from pathlib import Path
+from PIL import Image
 
 class Maze:
     directions = {
@@ -15,15 +18,55 @@ class Maze:
         'W': 'E'
     }
     
-    def __init__(self, rows:int, columns:int, seed:int=None) -> None:
+    def __init__(self, rows:int, columns:int, generate=True, seed:int=None) -> None:
         self.rows = rows
         self.columns = columns
-        self.cells = [[{'N': True, 'S': True, 'E': True, 'W': True} for j in range(columns)] for i in range(rows)]  # Mapa do labirinto (inicialmente todas direções fechadas)
-        self.__generate_walls()
+        self.solution = None
+        self.start = None
+        self.end = None
 
-        random.seed(seed)
-        random.shuffle(self.walls)
-        self.__kruskal()
+        if generate:
+            self.cells = [[{'N': True, 'S': True, 'E': True, 'W': True} for j in range(columns)] for i in range(rows)]  # Mapa do labirinto (inicialmente todas direções fechadas)
+            self.__generate_walls()
+
+            random.seed(seed)
+            random.shuffle(self.walls)
+            self.start = random.randint(0, columns)
+            self.end = random.randint(0, columns)
+            self.__kruskal()
+        else:
+            self.cells = [[{'N': False, 'S': False, 'E': False, 'W': False} for j in range(columns)] for i in range(rows)]
+
+    # Cria um Maze a partir de uma imagem gerada pelo algoritmo
+    def from_image(image_path:Path) -> Maze:
+        image = Image.open(image_path)
+
+        width, height = image.size
+        rows = (height - 1) // 2
+        columns = (width - 1) // 2
+
+        maze = Maze(rows, columns, generate=False)
+
+        for x in range(width):
+            if image.getpixel((x, 0)) == 255:
+                maze.start = (x - 1) // 2
+            if image.getpixel((x, height - 1)) == 255:
+                maze.end = (x - 1) // 2
+        
+        for y in range(1, height, 2):
+            for x in range(1, width, 2):
+                x_maze = (x - 1) // 2 
+                y_maze = (y - 1) // 2
+                if image.getpixel((x, y - 1)) == 0:
+                    maze.cells[y_maze][x_maze]['N'] = True
+                if image.getpixel((x, y + 1)) == 0:
+                    maze.cells[y_maze][x_maze]['S'] = True
+                if image.getpixel((x - 1, y)) == 0:
+                    maze.cells[y_maze][x_maze]['W'] = True
+                if image.getpixel((x + 1, y)) == 0:
+                    maze.cells[y_maze][x_maze]['E'] = True
+
+        return maze
 
     # Cria as possiveis arestas entre vertices
     def __generate_walls(self) -> None:
@@ -70,9 +113,15 @@ class Maze:
                     s += '|  '
                 else:
                     s += '   '
-            s += '|\n'
-        for j in self.cells[-1]:
-            s += '+--'
+            if self.cells[i][-1]['E']:        
+                s += '|\n'
+            else:
+                s += ' \n'
+        for nj, j in enumerate(self.cells[-1]):
+            if nj != self.end:
+                s += '+--'
+            else:
+                s += '+  '
         s += '+\n'
 
         return s
