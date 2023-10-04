@@ -12,13 +12,41 @@ Esse programa utiliza o algoritmo de Kruskal para gerar labirintos, criando alea
 
 ![print3](img/100x200.png)
 
+## Solver
+
+O módulo solver carrega uma imagem de um labirinto gerado pelo módulo generator e gera imagens com a solução do labirinto utilizando os algoritmos de busca escolhidos.
+
+As buscas implementadas são:
+
+- bfs: Busca em largura
+- dfs: Busca em profundidade
+- as: Algoritmo A*
+
+Exemplo de uso:
+
+![terminal_solver](img/term.png)
+
+Os pontos verdes na imagem gerada são os nós que foram explorados durante a busca.
+
+### BFS
+
+![bfs](img/solution_bfs.png)
+
+### DFS
+
+![dfs](img/solution_dfs.png)
+
+### A*
+
+![astar](img/solution_as.png)
+
 ## Instalação e execução
 
 Com Python 3 instalado na máquina, primeiro faça no terminal:
 ```
 pip install -r requirements.txt
 ```
-E depois, basta rodar a main.py:
+Para gerar labirintos, basta rodar a main.py:
 ```
 python3 src/main.py
 ```
