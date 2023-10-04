@@ -20,7 +20,7 @@ As buscas implementadas são:
 
 - bfs: Busca em largura
 - dfs: Busca em profundidade
-- as: Algoritmo A*
+- as: Algoritmo A* utilizando distância euclideana.
 
 Exemplo de uso:
 
